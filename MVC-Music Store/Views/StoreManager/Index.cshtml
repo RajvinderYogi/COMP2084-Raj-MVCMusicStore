@@ -1,0 +1,68 @@
+﻿@model IEnumerable<MVC_Music_Store.Models.Album>
+
+@{
+    ViewBag.Title = "Store Manager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.AlbumCount Albums
+    @if(ViewBag.SearchTerm != null)
+    {
+         @ViewBag.SearchTerm
+    }
+    </h2>
+
+<section class="col-md-3">
+    @Html.ActionLink("Create New", "Create")
+</section>
+<section class="text-right">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken();
+        <input name="Title" id="Title" placeholder="Enter Album Title" required />
+        <button class="btn btn-default">Search</button>
+    }
+</section>
+<table class="table table-hover table-striped sortable">
+    <tr>
+        <th>
+            Artist
+        </th>
+        <th>
+            Title
+        </th>
+        <th>
+            Genre
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            Action
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Artist.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Genre.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.AlbumId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.AlbumId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.AlbumId })
+        </td>
+    </tr>
+}
+
+</table>

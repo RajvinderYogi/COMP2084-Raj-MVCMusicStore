@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model MVC_Music_Store.Models.Genre
+<h2>Albums For: @Model.Name</h2>
+
+<table class="table table-striped table-hover">
+    <tr>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Price</th>
+    </tr>
+    @foreach(var a in Model.Albums)
+    {
+        <tr>
+            <td>@a.Title</td>
+            <td>@a.Artist.Name</td>
+            <td>@String.Format("{0:c}", a.Price)</td>
+        </tr>
+    }
+</table>
+
