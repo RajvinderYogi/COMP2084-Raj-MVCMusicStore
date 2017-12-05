@@ -9,6 +9,8 @@ namespace MVC_Music_Store.Controllers
 {
     public class ShoppingCartController : Controller
     {
+        //DB connection
+        MusicStoreModel db = new MusicStoreModel();
         // GET: ShoppingCart
         public ActionResult Index()
         {
@@ -37,6 +39,60 @@ namespace MVC_Music_Store.Controllers
 
             //redirect to index which will display the current cart
             return RedirectToAction("Index");
+        }
+        [Authorize]
+        //Get Checkout
+        public ActionResult Checkout()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //Post Checkout
+        public ActionResult Checkout(FormCollection values)
+        {
+            // create a new order and populate the fields from the form
+            var order = new Order();
+            TryUpdateModel(order);
+
+            //check the PromoCode for a value FREE
+            if(values["PromoCode"]!="FREE")
+            {
+                ViewBag.Message = "Use Promo Code FREE";
+                return View(order);
+            }
+            else
+            {
+                //promo code is good so save the order
+                //auto-fill the username, email, date and total
+                order.Username = User.Identity.Name;
+                order.Email = User.Identity.Name;
+                order.OrderDate = DateTime.Now;
+
+                var cart = ShoppingCart.GetCart(this.HttpContext);
+                order.Total = cart.GetTotal();
+
+                //save
+                db.Orders.Add(order);
+                db.SaveChanges();
+
+                // save order details from cart
+                var cartItems = cart.GetCartItems();
+
+                foreach(Cart item in cartItems)
+                {
+                    var orderDetail = new OrderDetail();
+                    orderDetail.OrderId = order.OrderId;
+                    orderDetail.AlbumId = item.AlbumId;
+                    orderDetail.Quantity = item.Count;
+                    orderDetail.UnitPrice = item.Album.Price;
+                    db.OrderDetails.Add(orderDetail);
+                }
+                db.SaveChanges();
+            }
+            //redirect the order Details
+            return RedirectToAction("Details", "order", new { Id = order.OrderId });
         }
     }
 }
