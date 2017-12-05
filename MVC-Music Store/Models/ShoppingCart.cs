@@ -85,5 +85,18 @@ namespace MVC_Music_Store.Models
                               select (int?)c.Count * c.Album.Price).Sum();
             return total ?? decimal.Zero;
         }
+
+        //empty cart
+        public void EmptyCart()
+        {
+            //get all the items in the cart table for th curren tuser
+            var cartItems = db.Carts.Where(c => c.CartId == ShoppingCartId);
+
+            foreach(Cart item in cartItems)
+            {
+                db.Carts.Remove(item);
+            }
+            db.SaveChanges();
         }
     }
+}

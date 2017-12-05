@@ -90,9 +90,12 @@ namespace MVC_Music_Store.Controllers
                     db.OrderDetails.Add(orderDetail);
                 }
                 db.SaveChanges();
+
+                //empty the user's cart
+                cart.EmptyCart();
             }
             //redirect the order Details
-            return RedirectToAction("Details", "order", new { Id = order.OrderId });
+            return RedirectToAction("Details", "Orders", new { id = order.OrderId });
         }
     }
 }
