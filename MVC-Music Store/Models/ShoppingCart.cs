@@ -67,9 +67,31 @@ namespace MVC_Music_Store.Models
             }
                 db.SaveChanges();
             }
+        //remove Item from cart
+        public void RemoveFromCart(int id)
+        {
+            //get the selected album
+            var item = db.Carts.SingleOrDefault(c => c.AlbumId == id
+            && c.CartId == ShoppingCartId);
 
-            //get the items in the cart
-             public List<Cart> GetCartItems()
+            if(item != null)
+            {
+                //if quantity is 1, delete the item
+                if(item.Count==1)
+                {
+                    db.Carts.Remove(item);
+                }
+                else
+                {
+                    //if quantity is > 1, substract 1 from the quantity
+                    item.Count--;
+                }
+                db.SaveChanges();
+            }
+        }
+
+        //get the items in the cart
+        public List<Cart> GetCartItems()
         {
             return db.Carts.Where(c => c.CartId == ShoppingCartId).ToList();
         }

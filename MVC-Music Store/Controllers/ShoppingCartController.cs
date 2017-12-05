@@ -40,6 +40,19 @@ namespace MVC_Music_Store.Controllers
             //redirect to index which will display the current cart
             return RedirectToAction("Index");
         }
+
+        //Get  remove from cart/300
+        public ActionResult RemoveFromCart(int Id)
+        {
+            //get the current cart
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+
+            //remove the current album from the cart
+            cart.RemoveFromCart(Id);
+
+            return RedirectToAction("Index");
+        }
+
         [Authorize]
         //Get Checkout
         public ActionResult Checkout()
