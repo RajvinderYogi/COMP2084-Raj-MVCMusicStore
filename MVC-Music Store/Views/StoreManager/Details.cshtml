@@ -48,7 +48,10 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.AlbumArtUrl)
+             @if (Model.AlbumArtUrl.Length > 0)
+            {
+                <img src="@Model.AlbumArtUrl" alt="Album Cover" />
+            }
         </dd>
 
     </dl>
