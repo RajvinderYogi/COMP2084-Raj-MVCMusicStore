@@ -93,15 +93,17 @@ namespace MVC_Music_Store.Controllers
                 // save order details from cart
                 var cartItems = cart.GetCartItems();
 
-                foreach(Cart item in cartItems)
-                {
-                    var orderDetail = new OrderDetail();
-                    orderDetail.OrderId = order.OrderId;
-                    orderDetail.AlbumId = item.AlbumId;
-                    orderDetail.Quantity = item.Count;
-                    orderDetail.UnitPrice = item.Album.Price;
-                    db.OrderDetails.Add(orderDetail);
-                }
+             foreach (Cart item in cartItems)
+            {
+                var orderDetail = new OrderDetail();
+                orderDetail.AlbumId = item.AlbumId;
+                orderDetail.OrderId = order.OrderId;
+                orderDetail.Quantity = item.Count;
+                orderDetail.UnitPrice = item.Album.Price;
+
+                // save the detail
+                db.OrderDetails.Add(orderDetail);
+            }
                 db.SaveChanges();
 
                 //empty the user's cart
