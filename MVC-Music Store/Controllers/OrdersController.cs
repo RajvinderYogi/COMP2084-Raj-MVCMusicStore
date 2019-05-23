@@ -19,7 +19,7 @@ namespace MVC_Music_Store.Controllers
         public ActionResult Index()
         {
             var orders = db.Orders.Where(o => o.Username == User.Identity.Name);
-            return View(db.Orders.ToList());
+            return View(orders.ToList());
         }
 
         // GET: Orders/Details/5
